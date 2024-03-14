@@ -10,20 +10,20 @@ def load_iris_binary():
     return data, label
 
 def plot_iris_histogram(data, label):
-    plt.figure()
+    plt.figure(figsize=(15, 12))
     
     for i in range(4):
         plt.subplot(2, 2, i+1)
-        plt.hist(data[i, label == 0], alpha=0.5, label='setosa', density=True)
-        plt.hist(data[i, label == 1], alpha=0.5, label='versicolor', density=True)
-        plt.hist(data[i, label == 2], alpha=0.5, label='virginica', density=True)
+        plt.hist(data[i, label == 0], alpha=0.5, label='setosa', density=True, ec='blue')
+        plt.hist(data[i, label == 1], alpha=0.5, label='versicolor', density=True, ec='orange')
+        plt.hist(data[i, label == 2], alpha=0.5, label='virginica', density=True, ec='green')
         plt.title(f'Feature {i+1}')
         plt.legend(loc='best')
     plt.tight_layout()
     plt.show()
 
 def plot_scatter(data, label):
-    plt.figure(figsize=(21, 16))
+    plt.figure(figsize=(10, 10))
     
     data_c1 = data[:, label == 0]
     data_c2 = data[:, label == 1]
@@ -39,13 +39,13 @@ def plot_scatter(data, label):
                 plt.xlabel(f'Feature {i+1}')
                 plt.ylabel(f'Feature {j+1}')
                 plt.legend(loc='best')
-            else:
+            else: # not needed, but cool
                 plt.subplot(4, 4, i*4 + j + 1)
-                plt.hist(data[i, label == 0], alpha=0.5, label='setosa', density=True)
-                plt.hist(data[i, label == 1], alpha=0.5, label='versicolor', density=True)
-                plt.hist(data[i, label == 2], alpha=0.5, label='virginica', density=True)
-                plt.title(f'Feature {i+1}')
+                plt.hist(data[i, label == 0], alpha=0.5, label='setosa', density=True, ec='blue')
+                plt.hist(data[i, label == 1], alpha=0.5, label='versicolor', density=True, ec='orange')
+                plt.hist(data[i, label == 2], alpha=0.5, label='virginica', density=True, ec='green')
                 plt.legend(loc='best')
+                plt.ylabel(f'Feature {i+1}')
     plt.tight_layout()
     plt.show()
 
