@@ -38,7 +38,10 @@ def split_data(data, label, perc=(2.0/3.0), seed=0):
 def pca(data, n_features=4):
     # Compute the PCA decomposition on n features
     
-    cov = np.cov(data)
+    mean = np.mean(data, axis=1).reshape(-1, 1)
+    centered_data = data - mean
+    cov = np.dot(centered_data, centered_data.T) / data.shape[1]
+    
     eigen_values, eigen_vectors = scipy.linalg.eigh(cov)
     sorted_index = np.argsort(eigen_values)[::-1]
     sorted_eigen_vectors = eigen_vectors[:, sorted_index]
@@ -74,44 +77,52 @@ def lda(data, label, n_features=3):
     
     return lda_data
 
-def plot_iris_scatter(data, label, first_f, second_f):
-    # Plot scatter plots for iris dataset features
-    plt.figure(figsize=(10, 10))
-    classes = ['versicolor', 'virginica']
-    colors = ['orange', 'green']
-    
-    for k in range(3):
-        plt.scatter(data[first_f, label == k], data[second_f, label == k], label=classes[k], s=20, c=colors[k])
-    plt.xlabel(f'Feature {second_f+1}')
-    plt.ylabel(f'Feature {first_f+1}')
-    plt.legend(loc='best')
-    plt.show()
-
-def plot_iris_histogram(data, label):
-    # Plot histograms for iris dataset features
+def plot_scatter(data, label, classes, features=(0, 1)):
     plt.figure()
-    classes = ['virginica', 'versicolor']
-    colors = ['blue', 'orange']
     
-    for i in range(1):
-        print(data.shape)
-        plt.hist(data[i, label == 0], alpha=0.5, label=classes[0], density=True, ec=colors[0], bins=5)
-        plt.hist(data[i, label == 1], alpha=0.5, label=classes[1], density=True, ec=colors[1], bins=5)
-        plt.title(f'Feature {i+1}')
+    n_features = np.unique(features).size
+    
+    for i in range(n_features-1):
+        for j in range(i+1, n_features):
+            for k in range(np.unique(label).size):
+                plt.scatter(data[features[i], label == k], data[features[i], label == k], label=classes[k])
+            plt.xlabel(f'Feature {features[i]+1}')
+            plt.ylabel(f'Feature {features[j]+1}')
+            plt.legend(loc='best')
+    plt.tight_layout()
+    plt.show()
+    
+def plot_histogram(data, label, classes, features=(0, 1)):
+    plt.figure()
+    
+    n_features = np.unique(features).size
+    
+    for i in range(n_features):
+        plt.subplot(1, n_features, i+1)
+        for j in range(np.unique(label).size):
+            plt.hist(data[features[i], label == j], alpha=0.5, label=classes[j], density=True, ec='black', bins=5)
+        plt.xlabel(f'Feature {features[i]+1}')
         plt.legend(loc='best')
+    plt.tight_layout()
     plt.show()
 
 def main():
     data, label = load_iris_binary()
+    data_train, label_train, data_test, label_test = split_data(data, label)
     
-    data_train, label_train, data_test, label_test = split_data(data=data, label=label)
+    lda_data_train = lda(data_train, label_train, n_features=1)
+    lda_data_test = lda(data_test, label_test, n_features=1)
     
-    lda_train = lda(data=data_train, label=label_train, n_features=1)
-    plot_iris_histogram(data=lda_train, label=label_train)
-    lda_test = lda(data=data_test, label=label_test, n_features=1)
-    plot_iris_histogram(data=lda_test, label=label_test)
+    plot_histogram(lda_data_train, label_train, ['versicolor', 'virginica'], features=[0])
+    plot_histogram(lda_data_test, label_test, ['versicolor', 'virginica'], features=[0])
     
+    threshold = (lda_data_train[0, label_train == 1].mean() + lda_data_train[0, label_train == 0].mean()) / 2
+    predicted_values = np.zeros(shape=label_test.shape, dtype=np.int32)
+    predicted_values[lda_data_test[0] >= threshold] = 0
+    predicted_values[lda_data_test[0] < threshold] = 1
     
+    count = np.sum(predicted_values == label_test)
+    print(f'Accuracy: {count} out of {label_test.size} samples correctly classified.')
     
 if __name__ == "__main__":
     main()
