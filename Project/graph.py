@@ -1,46 +1,134 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
+import scipy
+import utils
 
-
-def plot_histogram(data, label, classes):
-    # Plot histogram for the dataset features
+def plot_histogram(data: np.array, label:np.array, classes: dict[str, str]):
+    """ Plot histograms for dataset features
     
+        Parameters:
+            data: n_features, n_samples
+            label: n_samples
+            classes: dictionary with class names and colors
+    """
     plt.figure()
-    # TODO: make the color general
-    colors = ["blue", "orange"]
+    n_rows, _ = data.shape
     
-    for i in range(data.shape[0]):
-        plt.subplot(2, 3, i+1)
-        for j in range(2):
-            plt.hist(data[i, label == j], alpha=0.5, label=classes[j], density=True, ec=colors[j])
-        plt.title(f'Feature {i+1}')
+    if n_rows > 1:
+        for i in range(n_rows):
+            plt.subplot(len(classes), n_rows // len(classes), i+1)
+            for j, kv in enumerate(classes.items()):
+                class_name, class_color = kv
+                plt.hist(data[i, label == j], alpha=0.5, density=True, label=class_name, ec=class_color)
+            plt.title(f'Feature {i+1}')
+            plt.legend(loc='best')
+        plt.tight_layout()
+        plt.show()
+    else:
+        for i, kv in enumerate(classes.items()):
+            class_name, class_color = kv
+            plt.hist(data[0, label == i], alpha=0.5, density=True, label=class_name, ec=class_color)
+        plt.title('Feature 1')
         plt.legend(loc='best')
-    plt.tight_layout()
-    plt.show()
+        plt.show()
 
-def plot_scatter(data, label, classes):
-    # Plot scatter plots for dataset features
+def plot_scatter(data: np.array, label: np.array, classes: dict[str, str]):
+    """ Plot scatter plots for dataset features
     
+        Parameters:
+            data: n_features, n_samples
+            label: n_samples
+            classes: dictionary with class names and colors
+    """
     plt.figure(figsize=(10, 10))
-    # TODO: make the color general
-    colors = ["blue", "orange"]
     
-    x, _ = data.shape
+    n_rows, _ = data.shape
     
-    for i in range(x):
-        for j in range(x):
+    for i in range(n_rows):
+        for j in range(i, n_rows):
+            plt.subplot(n_rows, n_rows, i*n_rows + j + 1)
             if i != j:
-                plt.subplot(x, x, i*x + j + 1)
-                for k in range(2):
-                    plt.scatter(data[j, label == k], data[i, label == k], label=classes[k], s=1, c=colors[k])
+                for k, v in enumerate(classes.items()):
+                    class_name, class_color = v
+                    plt.scatter(data[j, label == k], data[i, label == k], label=class_name, s=1, c=class_color)
                 plt.xlabel(f'Feature {j+1}')
                 plt.ylabel(f'Feature {i+1}')
                 plt.legend(loc='best')
             else:
-                plt.subplot(x, x, i*x + j + 1)
-                for k in range(2):
-                    plt.hist(data[i, label == k], alpha=0.5, label=classes[k], density=True, ec=colors[k])
+                for k, v in enumerate(classes.items()):
+                    class_name, class_color = v
+                    plt.hist(data[i, label == k], alpha=0.5, label=class_name, density=True, ec=class_color)
                 plt.legend(loc='best')
                 plt.ylabel(f'Feature {i+1}')
     plt.tight_layout()
     plt.show()
+
+def plot_correlation_matrix(data: np.array, label: np.array):
+    """
+    Plot correlation matrix for dataset features.
+    
+    Parameters:
+        data: np.array, shape (n_features, n_samples)
+            Input dataset.
+        label: np.array, shape (n_samples,)
+            Labels for dataset samples.
+    """
+    correlation_matrix = np.corrcoef(data)
+    class_corr = {}
+    
+    for class_label in np.unique(label):
+        class_corr[class_label] = np.corrcoef(data[:, label == class_label])
+        
+    num_classes = len(class_corr)
+    num_plots = num_classes + 1
+    _, axes = plt.subplots(1, num_plots, figsize=(5*num_plots, 5))
+
+    sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f", square=True,
+                xticklabels=np.arange(1, len(correlation_matrix) + 1),
+                yticklabels=np.arange(1, len(correlation_matrix) + 1),
+                ax=axes[0])
+    axes[0].set_title('Overall Correlation Matrix')
+
+    for i, class_label in enumerate(class_corr.keys(), start=1):
+        sns.heatmap(class_corr[class_label], annot=True, cmap='coolwarm', fmt=".2f", square=True,
+                    xticklabels=np.arange(1, len(correlation_matrix) + 1),
+                    yticklabels=np.arange(1, len(correlation_matrix) + 1),
+                    ax=axes[i])
+        axes[i].set_title(f'Class {class_label} Correlation Matrix')
+
+    plt.tight_layout()
+    plt.show()
+
+def plot_pca_explained_variance(data:np.array):
+    """ Plot the explained variance for each principal component
+    
+        Parameters:
+            data: n_features, n_samples
+    """
+    mean = np.mean(data, axis=1).reshape(-1, 1)
+    centered_data = data - mean
+    cov = np.dot(centered_data, centered_data.T) / data.shape[1]
+    
+    eigen_values, _ = scipy.linalg.eigh(cov)
+    
+    total_eigen_values = np.sum(eigen_values)
+    var_exp = [(i / total_eigen_values) for i in sorted(eigen_values, reverse=True)]
+    cum_var_exp = np.cumsum(var_exp)
+    plt.bar(range(0, len(var_exp)), var_exp, alpha=0.5, align='center', label='individual explained variance')
+    plt.step(range(0, len(cum_var_exp)), cum_var_exp, where='mid', label='cumulative explained variance')
+    plt.xlabel('Principal components')
+    plt.ylabel('Explained variance ratio')
+    plt.legend(loc='best')
+    plt.show()
+
+def plot_lda_histogram(data: np.array, label: np.array, classes: dict[str, str]):
+    """ Plot histograms for dataset features
+    
+        Parameters:
+            data: n_features, n_samples
+            label: n_samples
+            classes: dictionary with class names and colors
+    """
+    lda_data = utils.lda(data=data, label=label, n_features=1)
+    plot_histogram(data=lda_data, label=label, classes=classes)
