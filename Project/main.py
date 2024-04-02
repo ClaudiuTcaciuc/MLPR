@@ -14,5 +14,6 @@ def main():
     graph.plot_correlation_matrix(data=data, label=label)
     graph.plot_pca_explained_variance(data=data)
     graph.plot_lda_histogram(data=data, label=label, classes=classes)
+
 if __name__ == "__main__":
     main()
