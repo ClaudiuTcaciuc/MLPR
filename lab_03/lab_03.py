@@ -11,12 +11,14 @@ def load_iris():
 
 def load_iris_binary():
     # Load binary iris dataset
+    # setosa = 0, versicolor = 1, virginica = 2
     iris_data = datasets.load_iris()
     data, label = iris_data['data'].T, iris_data['target']
     
     data = data[:, label != 0]
     label = label[label != 0]
-    label[label == 2] = 0
+    label[label == 1] = 0
+    label[label == 2] = 1
     return data, label
 
 def split_data(data, label, perc=(2.0/3.0), seed=0):
