@@ -77,7 +77,7 @@ def lda(data, label, n_features=3):
     selected_eigen_vectors = eigen_vectors[:, ::-1][:, :n_features]
     lda_data = np.dot(selected_eigen_vectors.T, data)
     
-    return lda_data
+    return lda_data, selected_eigen_vectors
 
 def plot_scatter(data, label, classes, features=(0, 1)):
     plt.figure()
@@ -112,16 +112,16 @@ def main():
     data, label = load_iris_binary()
     data_train, label_train, data_test, label_test = split_data(data, label)
     
-    lda_data_train = lda(data_train, label_train, n_features=1)
-    lda_data_test = lda(data_test, label_test, n_features=1)
+    lda_data_train, lda_selected_eigenvalues = lda(data_train, label_train, n_features=1)
+    lda_data_test = np.dot(lda_selected_eigenvalues.T, data_test)
     
     plot_histogram(lda_data_train, label_train, ['versicolor', 'virginica'], features=[0])
     plot_histogram(lda_data_test, label_test, ['versicolor', 'virginica'], features=[0])
     
     threshold = (lda_data_train[0, label_train == 1].mean() + lda_data_train[0, label_train == 0].mean()) / 2
     predicted_values = np.zeros(shape=label_test.shape, dtype=np.int32)
-    predicted_values[lda_data_test[0] >= threshold] = 0
-    predicted_values[lda_data_test[0] < threshold] = 1
+    predicted_values[lda_data_test[0] < threshold] = 0
+    predicted_values[lda_data_test[0] >= threshold] = 1
     
     count = np.sum(predicted_values == label_test)
     print(f'Accuracy: {count} out of {label_test.size} samples correctly classified.')
