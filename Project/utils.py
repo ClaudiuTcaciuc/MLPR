@@ -10,6 +10,22 @@ def load_data():
     
     return data_matrix.T, data_labels
 
+def split_data(data, label, perc=(2.0/3.0), seed=0):
+    """ Split the data 2/3 for train and 1/3 for test """
+    
+    n_train = int(data.shape[1] * perc)
+    np.random.seed(seed)
+    index = np.random.permutation(data.shape[1])
+    index_train = index[:n_train]
+    index_test = index[n_train:]
+
+    data_train = data[:, index_train]
+    label_train = label[index_train]
+    data_test = data[:, index_test]
+    label_test = label[index_test]
+    
+    return data_train, label_train, data_test, label_test
+
 def compute_statistics(data):
     """ Compute the mean, variance, std and covariance matrix of the data """
     mu_class = np.mean(data, axis=1).reshape(-1, 1)
@@ -32,7 +48,7 @@ def compute_statistics(data):
     print(f'Standard deviation\n{std}')
     
 
-def pca(data, n_features=4):
+def pca(data, n_features=4, required_eigen_vectors=False):
     """ Compute the PCA decomposition on n features
         Data: (n_features, n_samples)
     """
@@ -47,6 +63,9 @@ def pca(data, n_features=4):
     selected_eigen_vectors = sorted_eigen_vectors[:, :n_features]
     
     new_data = np.dot(selected_eigen_vectors.T, data)
+    
+    if required_eigen_vectors:
+        return new_data, selected_eigen_vectors
     return new_data
 
 def compute_Sw_Sb(data, label):
@@ -72,7 +91,7 @@ def compute_Sw_Sb(data, label):
     S_b /= data.shape[1]
     return S_w, S_b
 
-def lda(data, label, n_features=3):
+def lda(data, label, n_features=3, required_eigen_vectors=False):
     """ Compute the LDA decomposition on n features
             n_max = n_features - 1
         Data: (n_features, n_samples)
@@ -88,4 +107,6 @@ def lda(data, label, n_features=3):
     selected_eigen_vectors = eigen_vectors[:, ::-1][:, :n_features]
     lda_data = np.dot(selected_eigen_vectors.T, data)
     
+    if required_eigen_vectors:
+        return lda_data, selected_eigen_vectors
     return lda_data
