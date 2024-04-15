@@ -50,7 +50,7 @@ def main():
     cov = np.dot(centered_data.T, centered_data) / data.shape[0]
     print(f"cov: \n{cov}")
     
-    pdfGau  = logarithmic_gau_pdf(data, mean, cov)
+    pdfGau = logarithmic_gau_pdf(data, mean, cov)
     print(f"pdfGau: \n{np.sum(pdfGau)}")
     
     plt.figure()
