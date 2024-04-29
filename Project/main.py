@@ -2,6 +2,7 @@ import graph
 import utils
 import numpy as np
 from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import PolynomialFeatures
 
 from classifier import multivariate_gaussian_classifier as mgc
 from classifier import logistic_regression_classifier as lrc
@@ -67,12 +68,12 @@ def main():
     err_rate_lr = logistic_regression.err_rate(data, label)
     print(f"Error rate LR: {err_rate_lr*100:.2f}%, Accuracy: {(1-err_rate_lr)*100:.2f}%")
     
-    print("Using sklearn:")
-    logistic_regression_sklearn = LogisticRegression(C=1/0.1, solver='lbfgs')
-    logistic_regression_sklearn.fit(data.T, label)
-    y_pred = logistic_regression_sklearn.predict(data.T)
-    accuracy = np.mean(y_pred == label)
-    print(f"Accuracy: {accuracy*100:.2f}%")
+    print("quadratic logistic regression")
+    data_qlr = lrc.QuadraticExpansion.expand(data)
+    logistic_regression = lrc.LogisticRegression(lambda_=0.1)
+    logistic_regression.fit(data_qlr, label)
+    err_rate_lr = logistic_regression.err_rate(data_qlr, label)
+    print(f"Error rate LR: {err_rate_lr*100:.2f}%, Accuracy: {(1-err_rate_lr)*100:.2f}%")
 
     
 if __name__ == "__main__":

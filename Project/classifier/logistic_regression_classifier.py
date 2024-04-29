@@ -25,10 +25,14 @@ class LogisticRegression:
         x_opt, _, _ = opt.fmin_l_bfgs_b(self.logreg_obj, x0_train, args=(X, y), approx_grad=True)
         self.weights = x_opt
     
-    def predict(self, X):
+    def score(self, X):
         if self.weights is None:
-            raise ValueError("Model not trained yet. Call fit() before predict().")
-        z = self.weights[:-1].T @ X + self.weights[-1] # score
+            raise ValueError("Model not trained yet. Call fit() before score().")
+        z = self.weights[:-1].T @ X + self.weights[-1]
+        return z
+    
+    def predict(self, X):
+        z = self.score(X)
         y_pred = np.sign(self.sigmoid(z) - 0.5)
         return y_pred
     
@@ -36,3 +40,17 @@ class LogisticRegression:
         y_pred = self.predict(X)
         accuracy = np.mean(y_pred == y)
         return 1 - accuracy
+
+class QuadraticExpansion:
+    @staticmethod
+    def expand(X):
+        data_row = X.shape[0]
+        data_col = X.shape[1]
+        quad_features = np.zeros((data_row**2 + data_row, data_col))
+
+        for i in range(data_col):
+            tmp = np.dot(X[:, i].reshape(data_row, 1), X[:, i].reshape(1, data_row))
+            quad_features[:data_row**2, i] = tmp.flatten()
+            quad_features[data_row**2:, i] = X[:, i]
+
+        return quad_features
