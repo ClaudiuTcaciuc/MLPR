@@ -3,64 +3,169 @@ import scipy.special
 import scipy.linalg
 
 class GMM:
-    def __init__(self, n_components=1, covariance_type='full', tol=1e-6):
+    def __init__(self, n_components=1, covariance_type='full', tol=1e-6, psiEig = None, lbgAlpha = 0.1, verbose=False):
         self.n_components = n_components
         self.covariance_type = covariance_type
         self.tol = tol
-        self.weights = None
-        self.means = None
-        self.covariances = None
-        self.converged = False
+        self.psiEig = psiEig
+        self.lbgAlpha = lbgAlpha
+        self.verbose = verbose
+        self.gmm_list = []
 
-    def logpdf_GAU_ND(self, x, mu, C):
-        """ Compute the log of Gaussian PDF for N-dim data """
-        size = len(x)
-        det = np.linalg.det(C)
-        norm_const = 1.0/ (np.power((2*np.pi), float(size)/2) * np.sqrt(det))
-        x_mu = x - mu
-        inv = np.linalg.inv(C)
-        result = -0.5 * np.dot(x_mu.T, np.dot(inv, x_mu))
-        return np.log(norm_const) + result
+    def log_gau_pdf(self, X, mu, sigma):
+        """ Compute the log of the Gaussian pdf
+            X: n_features, n_samples
+            mu: class mean
+            sigma: class covariance matrix
+        """
+        
+        if X.shape[0] < X.shape[1]:
+            X = X.T
+        
+        _, d = X.shape # n: samples, d: features,
+        X_c = X - mu.reshape(1, -1)
+        inv_sigma = np.linalg.inv(sigma)
+        sign, log_det_sigma = np.linalg.slogdet(sigma)
+        det_sign = sign * log_det_sigma
+        quad_form = np.sum(X_c @ inv_sigma * X_c, axis=1)
+        log_pdf = -0.5 * (d * np.log(2 * np.pi) + det_sign + quad_form)
+        
+        return log_pdf
+    
+    def vcol(self, x):
+        return x.reshape((x.size, 1))
 
-    def fit(self, X):
-        """ Fit a GMM to the data using the EM algorithm """
-        n_samples, n_features = X.shape
-        # Initialization step
-        self.means = np.random.rand(self.n_components, n_features)
-        self.covariances = np.array([np.eye(n_features) for _ in range(self.n_components)])
-        self.weights = np.ones(self.n_components) / self.n_components
+    def vrow(self, x):
+        return x.reshape((1, x.size))
+    
+    def logpdf_GMM(self, X, gmm):
+        # Pre-allocate an array for storing log PDF values from all components
+        S = np.zeros((len(gmm), X.shape[1]))
 
-        log_likelihood = 0
-        for iteration in range(100):
-            # E-step
-            responsibilities = np.zeros((n_samples, self.n_components))
-            for i in range(self.n_components):
-                pdf = np.array([self.logpdf_GAU_ND(x, self.means[i], self.covariances[i]) for x in X])
-                responsibilities[:, i] = self.weights[i] * np.exp(pdf)
-            sum_responsibilities = responsibilities.sum(axis=1)[:, np.newaxis]
-            responsibilities /= sum_responsibilities
+        # Calculate the density for each component using vectorization
+        for idx, (w, mu, sigma) in enumerate(gmm):
+            S[idx] = self.log_gau_pdf(X, mu, sigma) + np.log(w)
+        S = np.vstack(S)
+        return scipy.special.logsumexp(S, axis=0)
+    
+    def smooth_psi(self, sigma):
+        U, s, Vt = np.linalg.svd(sigma)
+        s[s < self.psiEig] = self.psiEig
+        sigma_new = U @ (s.reshape(-1, 1) * U.T)
+        return sigma_new
+    
+    def train_GMM_EM_Iteration(self, X, gmm):
+        
+        # E-step
+        S = np.zeros((len(gmm), X.shape[1]))
+        for idx, (w, mu, sigma) in enumerate(gmm):
+            S[idx] = self.log_gau_pdf(X, mu, sigma) + np.log(w)
+        
+        S_normalized = np.exp(S - scipy.special.logsumexp(S, axis=0))
+        
+        # M-step
+        gmm_new = []
+        for idx in range(len(gmm)):
+            gamma = S_normalized[idx]
+            Z = gamma.sum()
+            # Exploit broadcasting to compute the sum
+            F = self.vcol((self.vrow(gamma) * X).sum(1))
+            S = (self.vrow(gamma) * X) @ X.T
+            mu_new = F / Z
+            sigma_new = S / Z - mu_new @ mu_new.T
+            w_new = Z / X.shape[1]
+            
+            if self.covariance_type == 'diagonal':
+                sigma_new = sigma_new * np.eye(X.shape[0])
+            
+            gmm_new.append((w_new, mu_new, sigma_new))
+        
+        if self.covariance_type == 'tied':
+            sigma_Ties = 0
+            for w, mu, sigma in gmm_new:
+                sigma_Ties += w * sigma
+            gmm_new = [(w, mu, sigma_Ties) for w, mu, sigma in gmm_new]
+        
+        if self.psiEig is not None:
+            gmm_new = [(w, mu, self.smooth_psi(sigma)) for w, mu, sigma in gmm_new]
+        
+        return gmm_new
+        
+    def train_GMM_EM(self, X, gmm):
+        ll_old = self.logpdf_GMM(X, gmm).mean()
+        ll_delta = None
+        it = 1
+        while ll_delta is None or ll_delta > self.tol:
+            gmm_new = self.train_GMM_EM_Iteration(X, gmm)
+            ll_new = self.logpdf_GMM(X, gmm_new).mean()
+            ll_delta = np.abs(ll_new - ll_old)
+            
+            if self.verbose:
+                print(f"Average ll: {ll_new:.8e}, Delta: {ll_delta:.8e} at iteration {it}")
+            
+            ll_old = ll_new
+            gmm = gmm_new
+            it += 1
+        
+        if self.verbose:
+            print(f"Converged after {it} iterations, average ll: {ll_new:.8e}")
+                
+        return gmm
+    
+    def split_GMM_LBG(self, gmm):
+        gmm_new = []
+        if self.verbose:
+            print(f"LBG - from {len(gmm)} to {2*len(gmm)} components")
+        
+        for w, mu, sigma in gmm:
+            U, s, Vt = np.linalg.svd(sigma)
+            d = U[:, 0:1] * s[0]**0.5 * self.lbgAlpha
+            gmm_new.append((w/2, mu + d, sigma))
+            gmm_new.append((w/2, mu - d, sigma))
+            
+        return gmm_new
+    
+    def train_GMM_LBG_EM(self, X, n_components):
+        # Compute the initial GMM
+        mu = np.mean(X, axis=1).reshape(-1, 1)
+        sigma = ((X - mu) @ ((X - mu).T)) / float(X.shape[1])
+        
+        if self.covariance_type == 'diagonal':
+            sigma = sigma * np.eye(X.shape[0])
+        
+        if self.psiEig is not None:
+            gmm = [(1.0, mu, self.smooth_psi(sigma))]
+        else:
+            gmm = [(1.0, mu, sigma)]
+        
+        # Iterate until the desired number of components is reached
+        while len(gmm) < n_components:
+            if self.verbose:
+                print(f"Average ll before split: {self.logpdf_GMM(X, gmm).mean():.8e}")
+            gmm = self.split_GMM_LBG(gmm)
+            if self.verbose:
+                print(f"Average ll after split: {self.logpdf_GMM(X, gmm).mean():.8e}")
+            gmm = self.train_GMM_EM(X, gmm)
+        
+        return gmm
+    
+    def fit(self, X, y, n_features):
+        for i in range(n_features):
+            gmm = self.train_GMM_LBG_EM(X[:, y == i], self.n_components)
+            self.gmm_list.append(gmm)
+    
+    def score(self, X):
+        score = []
+        for gmm in self.gmm_list:
+            score.append(self.logpdf_GMM(X, gmm))
+        score = np.vstack(score)
+        score += np.log(np.ones(3)/3).reshape(-1, 1)
+        
+        return score
+    
+    def score_binary(self, X):
+        return self.logpdf_GMM(X, self.gmm_list[1]) - self.logpdf_GMM(X, self.gmm_list[0]) 
 
-            # M-step
-            weighted_data_sum = np.dot(responsibilities.T, X)
-            for i in range(self.n_components):
-                self.means[i] = weighted_data_sum[i] / responsibilities[:, i].sum()
-                x_centered = X - self.means[i]
-                self.covariances[i] = np.dot(responsibilities[:, i] * x_centered.T, x_centered) / responsibilities[:, i].sum()
-                self.weights[i] = responsibilities[:, i].sum() / n_samples
-
-            # Check convergence
-            new_log_likelihood = np.sum(np.log(sum_responsibilities))
-            if np.abs(new_log_likelihood - log_likelihood) <= self.tol:
-                self.converged = True
-                break
-            log_likelihood = new_log_likelihood
-
-    def score_samples(self, X):
-        """Compute the weighted log probabilities for each sample."""
-        log_prob = np.zeros(X.shape[0])
-        for i in range(self.n_components):
-            pdf = np.array([self.logpdf_GAU_ND(x, self.means[i], self.covariances[i]) for x in X])
-            log_prob += self.weights[i] * np.exp(pdf)
-        return np.log(log_prob)
-
-
+    def predict(self, X):
+        score = self.score(X)
+        return np.argmax(score, axis=0)

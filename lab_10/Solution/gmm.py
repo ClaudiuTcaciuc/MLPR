@@ -13,6 +13,7 @@ import numpy
 import scipy
 import scipy.special
 import matplotlib.pyplot as plt
+import time
 
 def vcol(x):
     return x.reshape((x.size, 1))
@@ -166,8 +167,8 @@ def split_GMM_LBG(gmm, alpha = 0.1, verbose=True):
     for (w, mu, C) in gmm:
         U, s, Vh = numpy.linalg.svd(C)
         d = U[:, 0:1] * s[0]**0.5 * alpha
-        gmmOut.append((0.5 * w, mu - d, C))
         gmmOut.append((0.5 * w, mu + d, C))
+        gmmOut.append((0.5 * w, mu - d, C))
     return gmmOut
 
 # Train a full model using LBG + EM, starting from a single Gaussian model, until we have numComponents components. lbgAlpha is the value 'alpha' used for LBG, the otehr parameters are the same as in the EM functions above
@@ -196,7 +197,7 @@ def train_GMM_LBG_EM(X, numComponents, covType = 'Full', psiEig = None, epsLLAve
 
     
 if __name__ == '__main__':
-
+    t1 = time.time()
     X = numpy.load('Data/GMM_data_4D.npy')
     gmm = load_gmm('Data/GMM_4D_3G_init.json')
     llPrecomputed = numpy.load('Data/GMM_4D_3G_init_ll.npy')
@@ -269,4 +270,5 @@ if __name__ == '__main__':
     #print(load_gmm('Data/GMM_4D_4G_EM_LBG.json')) # you can print the gmms
     print ('Max absolute ll difference w.r.t. pre-trained model over all training samples:', (numpy.abs(logpdf_GMM(X, gmm) - logpdf_GMM(X, load_gmm('Data/GMM_4D_4G_EM_LBG.json')))).max())
 
-    
+    t2 = time.time()
+    print('Elapsed time: %.2f seconds' % (t2-t1))

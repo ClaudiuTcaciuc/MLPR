@@ -1,0 +1,375 @@
+IRIS - full - 1, Error rate: 4.00%
+Average ll before split: -0.776028874428519
+LBG - from 1 to 2 components
+Average ll after split: -0.7785783355121602
+Converged after 24 iterations with log-likelihood: 0.26209487086490524
+Average ll before split: -2.9045005500804573
+LBG - from 1 to 2 components
+Average ll after split: -2.9068019583411098
+Converged after 16 iterations with log-likelihood: -0.8120613617921886
+Average ll before split: -2.9669732067568595
+LBG - from 1 to 2 components
+Average ll after split: -2.9688422466982156
+Converged after 75 iterations with log-likelihood: -1.5943152549445496
+IRIS - full - 2, Error rate: 4.00%
+Average ll before split: -0.776028874428519
+LBG - from 1 to 2 components
+Average ll after split: -0.7785783355121602
+Converged after 24 iterations with log-likelihood: 0.26209487086490524
+Average ll before split: 0.26209487086490524
+LBG - from 2 to 4 components
+Average ll after split: 0.26009550874019877
+Converged after 24 iterations with log-likelihood: 0.7985672889481575
+Average ll before split: -2.9045005500804573
+LBG - from 1 to 2 components
+Average ll after split: -2.9068019583411098
+Converged after 16 iterations with log-likelihood: -0.8120613617921886
+Average ll before split: -0.8120613617921886
+LBG - from 2 to 4 components
+Average ll after split: -0.8134047095020893
+Converged after 77 iterations with log-likelihood: -0.1400497120750629
+Average ll before split: -2.9669732067568595
+LBG - from 1 to 2 components
+Average ll after split: -2.9688422466982156
+Converged after 75 iterations with log-likelihood: -1.5943152549445496
+Average ll before split: -1.5943152549445496
+LBG - from 2 to 4 components
+Average ll after split: -1.5952577672759256
+Converged after 139 iterations with log-likelihood: -1.4625444579948157
+IRIS - full - 4, Error rate: 4.00%
+Average ll before split: -0.776028874428519
+LBG - from 1 to 2 components
+Average ll after split: -0.7785783355121602
+Converged after 24 iterations with log-likelihood: 0.26209487086490524
+Average ll before split: 0.26209487086490524
+LBG - from 2 to 4 components
+Average ll after split: 0.26009550874019877
+Converged after 24 iterations with log-likelihood: 0.7985672889481575
+Average ll before split: 0.7985672889481575
+LBG - from 4 to 8 components
+Average ll after split: 0.7974096450230631
+Converged after 25 iterations with log-likelihood: 1.2121531756020036
+Average ll before split: -2.9045005500804573
+LBG - from 1 to 2 components
+Average ll after split: -2.9068019583411098
+Converged after 16 iterations with log-likelihood: -0.8120613617921886
+Average ll before split: -0.8120613617921886
+LBG - from 2 to 4 components
+Average ll after split: -0.8134047095020893
+Converged after 77 iterations with log-likelihood: -0.1400497120750629
+Average ll before split: -0.1400497120750629
+LBG - from 4 to 8 components
+Average ll after split: -0.1409107469124047
+Converged after 25 iterations with log-likelihood: 0.6474246399440747
+Average ll before split: -2.9669732067568595
+LBG - from 1 to 2 components
+Average ll after split: -2.9688422466982156
+Converged after 75 iterations with log-likelihood: -1.5943152549445496
+Average ll before split: -1.5943152549445496
+LBG - from 2 to 4 components
+Average ll after split: -1.5952577672759256
+Converged after 139 iterations with log-likelihood: -1.4625444579948157
+Average ll before split: -1.4625444579948157
+LBG - from 4 to 8 components
+Average ll after split: -1.4641381907382103
+Converged after 24 iterations with log-likelihood: -0.5115789942741049
+IRIS - full - 8, Error rate: 6.00%
+Average ll before split: -0.776028874428519
+LBG - from 1 to 2 components
+Average ll after split: -0.7785783355121602
+Converged after 24 iterations with log-likelihood: 0.26209487086490524
+Average ll before split: 0.26209487086490524
+LBG - from 2 to 4 components
+Average ll after split: 0.26009550874019877
+Converged after 24 iterations with log-likelihood: 0.7985672889481575
+Average ll before split: 0.7985672889481575
+LBG - from 4 to 8 components
+Average ll after split: 0.7974096450230631
+Converged after 25 iterations with log-likelihood: 1.2121531756020036
+Average ll before split: 1.2121531756020036
+LBG - from 8 to 16 components
+Average ll after split: 1.2104405947743462
+Converged after 52 iterations with log-likelihood: 1.7410168052670811
+Average ll before split: -2.9045005500804573
+LBG - from 1 to 2 components
+Average ll after split: -2.9068019583411098
+Converged after 16 iterations with log-likelihood: -0.8120613617921886
+Average ll before split: -0.8120613617921886
+LBG - from 2 to 4 components
+Average ll after split: -0.8134047095020893
+Converged after 77 iterations with log-likelihood: -0.1400497120750629
+Average ll before split: -0.1400497120750629
+LBG - from 4 to 8 components
+Average ll after split: -0.1409107469124047
+Converged after 25 iterations with log-likelihood: 0.6474246399440747
+Average ll before split: 0.6474246399440747
+LBG - from 8 to 16 components
+Average ll after split: 0.6456453048518439
+Converged after 28 iterations with log-likelihood: 1.293144793322453
+Average ll before split: -2.9669732067568595
+LBG - from 1 to 2 components
+Average ll after split: -2.9688422466982156
+Converged after 75 iterations with log-likelihood: -1.5943152549445496
+Average ll before split: -1.5943152549445496
+LBG - from 2 to 4 components
+Average ll after split: -1.5952577672759256
+Converged after 139 iterations with log-likelihood: -1.4625444579948157
+Average ll before split: -1.4625444579948157
+LBG - from 4 to 8 components
+Average ll after split: -1.4641381907382103
+Converged after 24 iterations with log-likelihood: -0.5115789942741049
+Average ll before split: -0.5115789942741049
+LBG - from 8 to 16 components
+Average ll after split: -0.5131997268125453
+Converged after 27 iterations with log-likelihood: 0.484602713106404
+IRIS - full - 16, Error rate: 4.00%
+IRIS - diagonal - 1, Error rate: 4.00%
+Average ll before split: 0.14856263538158193
+LBG - from 1 to 2 components
+Average ll after split: 0.14758761329642053
+Converged after 38 iterations with log-likelihood: 0.46773595763437864
+Average ll before split: -1.6879404048066784
+LBG - from 1 to 2 components
+Average ll after split: -1.687961314967829
+Converged after 15 iterations with log-likelihood: -0.5607576212885342
+Average ll before split: -2.050429253129242
+LBG - from 1 to 2 components
+Average ll after split: -2.0504580073484293
+Converged after 26 iterations with log-likelihood: -1.227172222143932
+IRIS - diagonal - 2, Error rate: 4.00%
+Average ll before split: 0.14856263538158193
+LBG - from 1 to 2 components
+Average ll after split: 0.14758761329642053
+Converged after 38 iterations with log-likelihood: 0.46773595763437864
+Average ll before split: 0.46773595763437864
+LBG - from 2 to 4 components
+Average ll after split: 0.4669755660799563
+Converged after 38 iterations with log-likelihood: 1.0013395816289004
+Average ll before split: -1.6879404048066784
+LBG - from 1 to 2 components
+Average ll after split: -1.687961314967829
+Converged after 15 iterations with log-likelihood: -0.5607576212885342
+Average ll before split: -0.5607576212885342
+LBG - from 2 to 4 components
+Average ll after split: -0.5612209140583102
+Converged after 37 iterations with log-likelihood: 0.039950220817025914
+Average ll before split: -2.050429253129242
+LBG - from 1 to 2 components
+Average ll after split: -2.0504580073484293
+Converged after 26 iterations with log-likelihood: -1.227172222143932
+Average ll before split: -1.227172222143932
+LBG - from 2 to 4 components
+Average ll after split: -1.2271984590728133
+Converged after 43 iterations with log-likelihood: -0.8193738193053065
+IRIS - diagonal - 4, Error rate: 4.00%
+Average ll before split: 0.14856263538158193
+LBG - from 1 to 2 components
+Average ll after split: 0.14758761329642053
+Converged after 38 iterations with log-likelihood: 0.46773595763437864
+Average ll before split: 0.46773595763437864
+LBG - from 2 to 4 components
+Average ll after split: 0.4669755660799563
+Converged after 38 iterations with log-likelihood: 1.0013395816289004
+Average ll before split: 1.0013395816289004
+LBG - from 4 to 8 components
+Average ll after split: 1.0011598091442069
+Converged after 36 iterations with log-likelihood: 1.295313848544426
+Average ll before split: -1.6879404048066784
+LBG - from 1 to 2 components
+Average ll after split: -1.687961314967829
+Converged after 15 iterations with log-likelihood: -0.5607576212885342
+Average ll before split: -0.5607576212885342
+LBG - from 2 to 4 components
+Average ll after split: -0.5612209140583102
+Converged after 37 iterations with log-likelihood: 0.039950220817025914
+Average ll before split: 0.039950220817025914
+LBG - from 4 to 8 components
+Average ll after split: 0.039254959417318686
+Converged after 36 iterations with log-likelihood: 0.6202450446214538
+Average ll before split: -2.050429253129242
+LBG - from 1 to 2 components
+Average ll after split: -2.0504580073484293
+Converged after 26 iterations with log-likelihood: -1.227172222143932
+Average ll before split: -1.227172222143932
+LBG - from 2 to 4 components
+Average ll after split: -1.2271984590728133
+Converged after 43 iterations with log-likelihood: -0.8193738193053065
+Average ll before split: -0.8193738193053065
+LBG - from 4 to 8 components
+Average ll after split: -0.8201556219872064
+Converged after 32 iterations with log-likelihood: -0.40476612717580673
+IRIS - diagonal - 8, Error rate: 6.00%
+Average ll before split: 0.14856263538158193
+LBG - from 1 to 2 components
+Average ll after split: 0.14758761329642053
+Converged after 38 iterations with log-likelihood: 0.46773595763437864
+Average ll before split: 0.46773595763437864
+LBG - from 2 to 4 components
+Average ll after split: 0.4669755660799563
+Converged after 38 iterations with log-likelihood: 1.0013395816289004
+Average ll before split: 1.0013395816289004
+LBG - from 4 to 8 components
+Average ll after split: 1.0011598091442069
+Converged after 36 iterations with log-likelihood: 1.295313848544426
+Average ll before split: 1.295313848544426
+LBG - from 8 to 16 components
+Average ll after split: 1.2943495363844573
+Converged after 42 iterations with log-likelihood: 1.7903018097322692
+Average ll before split: -1.6879404048066784
+LBG - from 1 to 2 components
+Average ll after split: -1.687961314967829
+Converged after 15 iterations with log-likelihood: -0.5607576212885342
+Average ll before split: -0.5607576212885342
+LBG - from 2 to 4 components
+Average ll after split: -0.5612209140583102
+Converged after 37 iterations with log-likelihood: 0.039950220817025914
+Average ll before split: 0.039950220817025914
+LBG - from 4 to 8 components
+Average ll after split: 0.039254959417318686
+Converged after 36 iterations with log-likelihood: 0.6202450446214538
+Average ll before split: 0.6202450446214538
+LBG - from 8 to 16 components
+Average ll after split: 0.6194757281096558
+Converged after 25 iterations with log-likelihood: 1.1798573653315194
+Average ll before split: -2.050429253129242
+LBG - from 1 to 2 components
+Average ll after split: -2.0504580073484293
+Converged after 26 iterations with log-likelihood: -1.227172222143932
+Average ll before split: -1.227172222143932
+LBG - from 2 to 4 components
+Average ll after split: -1.2271984590728133
+Converged after 43 iterations with log-likelihood: -0.8193738193053065
+Average ll before split: -0.8193738193053065
+LBG - from 4 to 8 components
+Average ll after split: -0.8201556219872064
+Converged after 32 iterations with log-likelihood: -0.40476612717580673
+Average ll before split: -0.40476612717580673
+LBG - from 8 to 16 components
+Average ll after split: -0.4055729422511934
+Converged after 34 iterations with log-likelihood: 0.4082041203607786
+IRIS - diagonal - 16, Error rate: 4.00%
+IRIS - tied - 1, Error rate: 4.00%
+Average ll before split: -0.776028874428519
+LBG - from 1 to 2 components
+Average ll after split: -0.7785783355121602
+Converged after 26 iterations with log-likelihood: 0.2580105942108445
+Average ll before split: -2.9045005500804573
+LBG - from 1 to 2 components
+Average ll after split: -2.9068019583411098
+Converged after 16 iterations with log-likelihood: -0.6974420592014668
+Average ll before split: -2.9669732067568595
+LBG - from 1 to 2 components
+Average ll after split: -2.9688422466982156
+Converged after 49 iterations with log-likelihood: -1.5793960786201755
+IRIS - tied - 2, Error rate: 4.00%
+Average ll before split: -0.776028874428519
+LBG - from 1 to 2 components
+Average ll after split: -0.7785783355121602
+Converged after 26 iterations with log-likelihood: 0.2580105942108445
+Average ll before split: 0.2580105942108445
+LBG - from 2 to 4 components
+Average ll after split: 0.2558587750148977
+Converged after 68 iterations with log-likelihood: 0.7296185901028375
+Average ll before split: -2.9045005500804573
+LBG - from 1 to 2 components
+Average ll after split: -2.9068019583411098
+Converged after 16 iterations with log-likelihood: -0.6974420592014668
+Average ll before split: -0.6974420592014668
+LBG - from 2 to 4 components
+Average ll after split: -0.6985652990271559
+Converged after 42 iterations with log-likelihood: -0.013811046097571283
+Average ll before split: -2.9669732067568595
+LBG - from 1 to 2 components
+Average ll after split: -2.9688422466982156
+Converged after 49 iterations with log-likelihood: -1.5793960786201755
+Average ll before split: -1.5793960786201755
+LBG - from 2 to 4 components
+Average ll after split: -1.5802462691062773
+Converged after 59 iterations with log-likelihood: -1.2189464805777768
+IRIS - tied - 4, Error rate: 4.00%
+Average ll before split: -0.776028874428519
+LBG - from 1 to 2 components
+Average ll after split: -0.7785783355121602
+Converged after 26 iterations with log-likelihood: 0.2580105942108445
+Average ll before split: 0.2580105942108445
+LBG - from 2 to 4 components
+Average ll after split: 0.2558587750148977
+Converged after 68 iterations with log-likelihood: 0.7296185901028375
+Average ll before split: 0.7296185901028375
+LBG - from 4 to 8 components
+Average ll after split: 0.7283892650468539
+Converged after 44 iterations with log-likelihood: 1.161286328147977
+Average ll before split: -2.9045005500804573
+LBG - from 1 to 2 components
+Average ll after split: -2.9068019583411098
+Converged after 16 iterations with log-likelihood: -0.6974420592014668
+Average ll before split: -0.6974420592014668
+LBG - from 2 to 4 components
+Average ll after split: -0.6985652990271559
+Converged after 42 iterations with log-likelihood: -0.013811046097571283
+Average ll before split: -0.013811046097571283
+LBG - from 4 to 8 components
+Average ll after split: -0.014277967824972855
+Converged after 77 iterations with log-likelihood: 0.33306775092701724
+Average ll before split: -2.9669732067568595
+LBG - from 1 to 2 components
+Average ll after split: -2.9688422466982156
+Converged after 49 iterations with log-likelihood: -1.5793960786201755
+Average ll before split: -1.5793960786201755
+LBG - from 2 to 4 components
+Average ll after split: -1.5802462691062773
+Converged after 59 iterations with log-likelihood: -1.2189464805777768
+Average ll before split: -1.2189464805777768
+LBG - from 4 to 8 components
+Average ll after split: -1.2197876882306948
+Converged after 21 iterations with log-likelihood: -0.49615900115862094
+IRIS - tied - 8, Error rate: 4.00%
+Average ll before split: -0.776028874428519
+LBG - from 1 to 2 components
+Average ll after split: -0.7785783355121602
+Converged after 26 iterations with log-likelihood: 0.2580105942108445
+Average ll before split: 0.2580105942108445
+LBG - from 2 to 4 components
+Average ll after split: 0.2558587750148977
+Converged after 68 iterations with log-likelihood: 0.7296185901028375
+Average ll before split: 0.7296185901028375
+LBG - from 4 to 8 components
+Average ll after split: 0.7283892650468539
+Converged after 44 iterations with log-likelihood: 1.161286328147977
+Average ll before split: 1.161286328147977
+LBG - from 8 to 16 components
+Average ll after split: 1.1611152374790434
+Converged after 39 iterations with log-likelihood: 1.679028588374688
+Average ll before split: -2.9045005500804573
+LBG - from 1 to 2 components
+Average ll after split: -2.9068019583411098
+Converged after 16 iterations with log-likelihood: -0.6974420592014668
+Average ll before split: -0.6974420592014668
+LBG - from 2 to 4 components
+Average ll after split: -0.6985652990271559
+Converged after 42 iterations with log-likelihood: -0.013811046097571283
+Average ll before split: -0.013811046097571283
+LBG - from 4 to 8 components
+Average ll after split: -0.014277967824972855
+Converged after 77 iterations with log-likelihood: 0.33306775092701724
+Average ll before split: 0.33306775092701724
+LBG - from 8 to 16 components
+Average ll after split: 0.33279618482068063
+Converged after 20 iterations with log-likelihood: 1.263874257763566
+Average ll before split: -2.9669732067568595
+LBG - from 1 to 2 components
+Average ll after split: -2.9688422466982156
+Converged after 49 iterations with log-likelihood: -1.5793960786201755
+Average ll before split: -1.5793960786201755
+LBG - from 2 to 4 components
+Average ll after split: -1.5802462691062773
+Converged after 59 iterations with log-likelihood: -1.2189464805777768
+Average ll before split: -1.2189464805777768
+LBG - from 4 to 8 components
+Average ll after split: -1.2197876882306948
+Converged after 21 iterations with log-likelihood: -0.49615900115862094
+Average ll before split: -0.49615900115862094
+LBG - from 8 to 16 components
+Average ll after split: -0.4965775942324211
+Converged after 40 iterations with log-likelihood: 0.19159130294262822
+IRIS - tied - 16, Error rate: 6.00%
