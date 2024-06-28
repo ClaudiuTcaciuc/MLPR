@@ -46,7 +46,7 @@ def main():
     labels = np.load('Data/labels.npy')
     eval_labels = np.load('Data/eval_labels.npy')
     
-    fig, axs = plt.subplots(2, 4, figsize=(15, 5))  # Creates a figure with 2 subplots
+    prior = 0.2
     
     print()
     # Calibration single-fold approach
@@ -55,58 +55,51 @@ def main():
     scal2, sval2 = score_s2[::3], np.hstack([score_s2[1::3], score_s2[2::3]])
     labels_cal, labels_val = labels[::3], np.hstack([labels[1::3], labels[2::3]])
     
-    prior = 0.2
-    print(f"\tSystem 1 with prior: {prior}")
+    clf_s1 = LogisticRegressionWeighted(lambda_=0, pi=prior, n_T=np.sum(labels_cal==1), n_F=np.sum(labels_cal==0))
+    clf_s1.fit(scal1.reshape(1, -1), labels_cal)
+    
+    clf_s2 = LogisticRegressionWeighted(lambda_=0, pi=prior, n_T=np.sum(labels_cal==1), n_F=np.sum(labels_cal==0))
+    clf_s2.fit(scal2.reshape(1, -1), labels_cal)
+    
+    print("\tSystem 1 not calibrated")
     compute_statistics(sval1, labels_val, prior, unique_labels=(0, 1))
-    plot_bayes_error(scores=sval1, y_true=labels_val, unique_labels=(0, 1), ax=axs[0, 0])
-    axs[0, 0].set_title('System 1 Bayes error')
-    
-    print(f"\tSystem 2 with prior: {prior}")
-    compute_statistics(sval2, labels_val, prior, unique_labels=(0, 1))
-    plot_bayes_error(scores=sval2, y_true=labels_val, unique_labels=(0, 1), ax=axs[0, 2])
-    axs[0, 2].set_title('System 2 Bayes error')
-    
-    print()
-    print(f"\t System 1 evaluation with prior: {prior}")
+    print("\tSystem 1 calibrated")
+    score_s1_cal = clf_s1.score(sval1.reshape(1, -1)) - np.log(prior / (1 - prior))
+    compute_statistics(score_s1_cal, labels_val, prior, unique_labels=(0, 1))
+    print("\tSystem 1 evaluation not calibrated")
     compute_statistics(eval_scores_s1, eval_labels, prior, unique_labels=(0, 1))
-    plot_bayes_error(scores=eval_scores_s1, y_true=eval_labels, unique_labels=(0, 1), ax=axs[0, 1])
-    axs[0, 1].set_title('System 1 Evaluation Bayes error')
-    
-    print(f"\t System 2 evaluation with prior: {prior}")
-    compute_statistics(eval_scores_s2, eval_labels, prior, unique_labels=(0, 1))
-    plot_bayes_error(scores=eval_scores_s2, y_true=eval_labels, unique_labels=(0, 1), ax=axs[0, 3])
-    axs[0, 3].set_title('System 2 Evaluation Bayes error')
-    
-    print() 
-    clf = LogisticRegressionWeighted(lambda_=0, pi=prior, n_T=np.sum(labels_cal==1), n_F=np.sum(labels_cal==0))
-    clf.fit(scal1.reshape(1, -1), labels_cal)
-    score = clf.score(sval1.reshape(1, -1)) - np.log(prior / (1 - prior))
-    print(f"\tSystem 1 with prior: {prior} after calibration")
-    compute_statistics(score, labels_val, prior, unique_labels=(0, 1))
-    plot_bayes_error(scores=score, y_true=labels_val, unique_labels=(0, 1), ax=axs[1, 0])
-    axs[1, 0].set_title('System 1 Calibration Bayes error')
+    print("\tSystem 1 evaluation calibrated")
+    score_s1_eval_cal = clf_s1.score(eval_scores_s1.reshape(1, -1)) - np.log(prior / (1 - prior))
+    compute_statistics(score_s1_eval_cal, eval_labels, prior, unique_labels=(0, 1))
     
     print()
-    score = clf.score(eval_scores_s1.reshape(1, -1)) - np.log(prior / (1 - prior))
-    print(f"\tSystem 1 evaluation with prior: {prior} after calibration")
-    compute_statistics(score, eval_labels, prior, unique_labels=(0, 1))
-    plot_bayes_error(scores=score, y_true=eval_labels, unique_labels=(0, 1), ax=axs[1, 1])
-    axs[1, 1].set_title('System 1 Evaluation Calibration Bayes error')
     
-    clf.fit(scal2.reshape(1, -1), labels_cal)
-    score = clf.score(sval2.reshape(1, -1)) - np.log(prior / (1 - prior))
-    print(f"\tSystem 2 with prior: {prior} after calibration")
-    compute_statistics(score, labels_val, prior, unique_labels=(0, 1))
-    plot_bayes_error(scores=score, y_true=labels_val, unique_labels=(0, 1), ax=axs[1, 2])
-    axs[1, 2].set_title('System 2 Calibration Bayes error')
+    print("\tSystem 2 not calibrated")
+    compute_statistics(sval2, labels_val, prior, unique_labels=(0, 1))
+    print("\tSystem 2 calibrated")
+    score_s2_cal = clf_s2.score(sval2.reshape(1, -1)) - np.log(prior / (1 - prior))
+    compute_statistics(score_s2_cal, labels_val, prior, unique_labels=(0, 1))
+    print("\tSystem 2 evaluation not calibrated")
+    compute_statistics(eval_scores_s2, eval_labels, prior, unique_labels=(0, 1))
+    print("\tSystem 2 evaluation calibrated")
+    score_s2_eval_cal = clf_s2.score(eval_scores_s2.reshape(1, -1)) - np.log(prior / (1 - prior))
+    compute_statistics(score_s2_eval_cal, eval_labels, prior, unique_labels=(0, 1))
     
-    score = clf.score(eval_scores_s2.reshape(1, -1)) - np.log(prior / (1 - prior))
-    print(f"\tSystem 2 evaluation with prior: {prior} after calibration")
-    compute_statistics(score, eval_labels, prior, unique_labels=(0, 1))
-    plot_bayes_error(scores=score, y_true=eval_labels, unique_labels=(0, 1), ax=axs[1, 3])
-    axs[1, 3].set_title('System 2 Evaluation Calibration Bayes error')
+    print()
+    print("Fusion single-fold approach")
     
-    plt.show()
+    fused_sys = np.vstack([scal1, scal2])
+    fused_sys_val = np.vstack([sval1, sval2])
+    clf_fusion = LogisticRegressionWeighted(lambda_=0, pi=prior, n_T=np.sum(labels_cal==1), n_F=np.sum(labels_cal==0))
+    clf_fusion.fit(fused_sys, labels_cal)
+    score_fusion = clf_fusion.score(fused_sys_val) - np.log(prior / (1 - prior))
+    print("\tFusion validation")
+    compute_statistics(score_fusion, labels_val, prior, unique_labels=(0, 1))
+    
+    fused_sys_eval = np.vstack([eval_scores_s1, eval_scores_s2])
+    score_fusion_eval = clf_fusion.score(fused_sys_eval) - np.log(prior / (1 - prior))
+    print("\tFusion evaluation")
+    compute_statistics(score_fusion_eval, eval_labels, prior, unique_labels=(0, 1))
     
 if __name__ == "__main__":
     main()

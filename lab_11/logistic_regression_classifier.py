@@ -43,7 +43,7 @@ class LogisticRegression:
         x0_train = np.zeros(d + 1)
         
         x_opt, value, _ = opt.fmin_l_bfgs_b(self.logreg_obj, x0_train, args=(X, y), approx_grad=True)
-        print(f"Optimal value: {value}")
+        # print(f"Optimal value: {value}")
         self.weights = x_opt
     
     def score(self, X):
