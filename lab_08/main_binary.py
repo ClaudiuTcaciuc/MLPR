@@ -57,13 +57,13 @@ def main():
     print("\n")
     
     # Weighted Logistic Regression
-    pT = 0.5
+    pT = 0.8
     for l in lambda_:
-        model = LogisticRegressionWeighted(lambda_=l, pi=pEmp, n_T=n_T, n_F=n_F)
+        model = LogisticRegressionWeighted(lambda_=l, pi=pT, n_T=n_T, n_F=n_F)
         model.fit(data_train, label_train)
         accuracy = model.predict(data_test, label_test)
         print(f"Accuracy with lambda={l}: {(accuracy)*100:.1f}, Error rate: {(1 - accuracy)*100:.1f}")
-        score = model.score(data_test) - np.log(pEmp / (1 - pEmp))
+        score = model.score(data_test) - np.log(pT / (1 - pT))
         compute_statistics(score, label_test, pT, unique_labels=(0, 1))
 
 if __name__ == "__main__":
